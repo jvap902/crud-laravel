@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PessoaController;
+use App\Http\Controllers\LivroController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,5 +49,28 @@ Route::post('/refeicoes', function () {
     print "POST pworeiwer";
 });
 
+//rotas pessoas
 Route::get('/pessoas', [PessoaController::class, 'index']);
-Route::get('/pessoas/{id}', [PessoaController::class, 'show'])->where('id', '[0-9]+');
+Route::get('/pessoas/show/{id}', [PessoaController::class, 'show'])->where('id', '[0-9]+');
+Route::get('/pessoas/create', [PessoaController::class, 'create']);
+Route::post('/pessoas/store', [PessoaController::class, 'store']);
+Route::get('pessoas/edit/{id}', [PessoaController::class, 'edit']);
+Route::post('pessoas/update', [PessoaController::class, 'update']);
+Route::get('pessoas/destroy/{id}', [PessoaController::class, 'destroy']);
+
+//rotas livros
+Route::get('/livros', [LivroController::class, 'index']);
+Route::get('/livros/show/{id}', [LivroController::class, 'show'])->where('id', '[0-9]+');
+Route::get('/livros/create', [LivroController::class, 'create']);
+Route::post('livros/store', [LivroController::class, 'store']);
+Route::get('livros/edit/{id}', [LivroController::class, 'edit']);
+Route::post('livros/update', [LivroController::class, 'update']);
+Route::get('livros/destroy/{id}', [LivroController::class, 'destroy']);
+
+// GET: pessoas
+// GET: pessoas/show/{id}
+// GET: pessoas/create
+// POST: pessoas/store
+// GET: pessoas/edit/{id}
+// POST: pessoas/update{id}
+// GET: pessoas/destroy
