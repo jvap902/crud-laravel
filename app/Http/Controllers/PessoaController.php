@@ -11,7 +11,12 @@ class PessoaController extends Controller
 
         // $pessoas = DB::select('select * from pessoas;');
 
-        $pessoas = DB::table('pessoas')->where('nome', 'nome')->get();
+        $pessoas = DB::table('pessoas')
+        ->select()
+        ->addSelect(DB::raw("floor(datediff(now(), dtnasc)/365) as idade"))
+        ->orderBy('nome')
+        ->get();
+        // ->selectRaw("id, nome, sobrenome, floor(datediff(now(), dtnasc)/365) as idade")
 
         return view('pessoas.index', ['pessoas' => $pessoas]);
 
@@ -22,32 +27,10 @@ class PessoaController extends Controller
     }
 
     function show ($id){
-        $pessoas = DB::select("SELECT * FROM pessoas WHERE id = :id;", [$id]);
+        $pessoas = DB::table('pessoas')
+        ->selectRaw("id, nome, sobrenome, date_format(dtnasc, '%d/%m/%Y') as dataformatada, floor(datediff(now(),dtnasc)/365) as idade")->find($id);
 
-        return view('pessoas.show', ['pessoa' => $pessoas[0]]);
-
-    //     $p = [];
-    //     foreach($this->pessoas as $pessoa){ //atualmente não faz nada por causa do break, mas sem ele faz a mesma coisa da de baixo
-    //         if ($pessoa['id'] == $id){
-    //             $p = $pessoa;
-    //             break;
-    //         }
-    //     }
-
-    //     $p = array_values(array_filter($this->pessoas,
-    //         function($a) use ($id){return $a['id'] == $id;}
-    //     ));
-
-    //     if (empty($p)){
-    //         print "<b> Nenhuma pessoa encontrada com o id: {$id} </b>";
-    //         die;
-    //     }else{
-    //         $p = $p[0];
-    //     }
-
-    //     print "<h1>Pessoa</h1>";
-    //     print "<p> A pessoa com o id = $id é ";
-    //     print "<label>{$p['nome']} {$p['sobrenome']}</label>";
+        return view('pessoas.show', ['pessoa' => $pessoas]);
     }
 
     function create (){
@@ -56,34 +39,37 @@ class PessoaController extends Controller
 
     function store (Request $request){
         $data = $request->all();
+        unset($data['_token']);
 
-        DB::insert("INSERT INTO pessoas(nome, sobrenome) values(:nome, :sobrenome);",
-        [
-            'nome' => $data['nome'],
-            'sobrenome' => $data['sobrenome']
-        ]);
+        DB::table('pessoas')->insert($data);
 
-
-        // DB::table('pessoas')->insert([
+        // DB::insert("INSERT INTO pessoas(nome, sobrenome, dtnasc) values(:nome, :sobrenome, :dtnasc);",
+        // [
         //     'nome' => $data['nome'],
         //     'sobrenome' => $data['sobrenome'],
+        //     'dtnasc' =>$data['dtnasc']
         // ]);
 
         return redirect('/pessoas');
     }
 
     function edit($id){
-        $pessoa = DB::select("SELECT * FROM pessoas WHERE id = ?", [$id]);
-        return view('pessoas.edit', ['pessoa' => $pessoa[0]]);
+        // $pessoa = DB::select("SELECT * FROM pessoas WHERE id = ?", [$id]);
+        // return view('pessoas.edit', ['pessoa' => $pessoa][0]);
+
+        $pessoa = DB::table('pessoas')->find($id);
+
+        return view('pessoas.edit', ['pessoa' => $pessoa]);
     }
 
     function update (Request $request) {
         $data = $request->all();
-        DB::update("UPDATE pessoas SET nome = :nome, sobrenome = :sobrenome WHERE id = :id;",
+        DB::update("UPDATE pessoas SET nome = :nome, sobrenome = :sobrenome, dtnasc = :dtnasc WHERE id = :id;",
         [
             'id' => $data['id'],
             'nome' => $data['nome'],
-            'sobrenome' => $data['sobrenome']
+            'sobrenome' => $data['sobrenome'],
+            'dtnasc' => $data['dtnasc']
         ]);
 
         // $data = $request->all();

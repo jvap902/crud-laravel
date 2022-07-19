@@ -5,16 +5,20 @@
 <table class="table table-dark">
     <thead>
         <tr>
+            {{-- <th>ID</th> --}}
             <th>Nome</th>
             <th>Sobrenome</th>
+            <th>Idade</th>
             <th>Ações</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($pessoas as $pessoa)
             <tr>
+                {{-- <td> {{ $pessoa->id }} </td> --}}
                 <td> {{ $pessoa->nome }} </td>
                 <td> {{ $pessoa->sobrenome }} </td>
+                <td> {{ $pessoa->idade }} </td>
                 <td>
                     <a class="btn btn-warning" href="/pessoas/edit/{{ $pessoa->id }}">Alterar</a>
                     <a class="btn btn-primary" href="/pessoas/show/{{ $pessoa->id }}">Ver</a>
