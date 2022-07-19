@@ -1,16 +1,14 @@
-<h2>Incluir pessoas</h2>
+@extends('base.index')
+
+@section('container')
 <form action='/pessoas/store' method='post'>
     <input type='hidden' name='_token' value='{{ csrf_token() }}'/>
-    <div>
-        <label>Nome</label>
-        <input type='text' name='nome'/>
-    </div>
-    <div>
-        <label>Sobrenome</label>
-        <input type='text' name='sobrenome'/>
-    </div>
-    <div>
-        <button type='submit'>Enviar</button>
+    @include('components.field', ['type' => 'text', 'name' => 'nome', 'label' => 'Nome', 'value' => ''])
+    @include('components.field', ['type' => 'text', 'name' => 'sobrenome', 'label' => 'Sobrenome', 'value' => ''])
+    <div class="mb-3">
+        @include('components.button', ['type' => 'button', 'color' => 'danger', 'text' => 'Voltar'])
+        @include('components.button', ['type' => 'submit', 'color' => 'success', 'text' => 'Enviar'])
     </div>
 </form>
+@endsection
 

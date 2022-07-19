@@ -9,7 +9,9 @@ class PessoaController extends Controller
 {
         function index (){
 
-        $pessoas = DB::select('select * from pessoas;');
+        // $pessoas = DB::select('select * from pessoas;');
+
+        $pessoas = DB::table('pessoas')->where('nome', 'nome')->get();
 
         return view('pessoas.index', ['pessoas' => $pessoas]);
 

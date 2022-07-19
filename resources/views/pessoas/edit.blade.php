@@ -1,17 +1,14 @@
-<h2>Incluir pessoas</h2>
+@extends('base.index')
+
+@section('container')
 <form action='/pessoas/update/' method='post'>
     <input type='hidden' name='_token' value='{{ csrf_token() }}'/>
-    <input type="hidden" value="{{ $pessoa->id }}" name="id"/>
+    @include('components.field', ['type' => 'hidden', 'name' => 'id', 'label' => '', 'value' => $pessoa->id ])
+    @include('components.field', ['type' => 'text', 'name' => 'nome', 'label' => 'Nome', 'value' => $pessoa->nome ])
+    @include('components.field', ['type' => 'text', 'name' => 'sobrenome', 'label' => 'Sobrenome', 'value' => $pessoa->sobrenome ])
     <div>
-        <label>Nome</label>
-        <input type='text' value="{{ $pessoa->nome }}" name='nome'/>
-    </div>
-    <div>
-        <label>Sobrenome</label>
-        <input type='text' value="{{ $pessoa->sobrenome }}" name='sobrenome'/>
-    </div>
-    <div>
-        <button type='submit'>Enviar</button>
+        @include('components.button', ['type' => 'button', 'color' => 'danger', 'text' => 'Voltar'])
+        @include('components.button', ['type' => 'submit', 'color' => 'success', 'text' => 'Enviar'])
     </div>
 </form>
-
+@endsection
